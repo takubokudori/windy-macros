@@ -1,5 +1,7 @@
 // Copyright takubokudori.
 // This source code is licensed under the MIT or Apache-2.0 license.
+#![cfg(windows)]
+
 use std::str::FromStr;
 use syn::{parse_macro_input, Lit};
 use windy::*;
