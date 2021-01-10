@@ -1,0 +1,12 @@
+[package]
+name = "windy-macros"
+version = "0.1.0"
+authors = ["takubokudori <takubokudori@gmail.com>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.58", features = ["full", "extra-traits"] }
+windy = "0.1.1"
