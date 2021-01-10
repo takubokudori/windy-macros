@@ -1,6 +1,9 @@
 # Windy-macros
 
-A macros for [Windy](https://github.com/takubokudori/windy).
+[![crates.io](https://img.shields.io/crates/v/windy-macros.svg)](https://crates.io/crates/windy-macros)
+[![docs.rs](https://docs.rs/windy-macros/badge.svg)](https://docs.rs/windy-macros)
+
+Macros for [Windy](https://github.com/takubokudori/windy).
 
 # Features
 
@@ -21,7 +24,7 @@ Add the following lines to your Cargo.toml:
 
 ```toml
 [dependencies]
-windy = "0.1.1"
+windy = "0.1.2"
 windy-macros = "0.1.0"
 ```
 
