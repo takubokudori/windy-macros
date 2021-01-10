@@ -1,6 +1,19 @@
 # Windy-macros
 
-Windy macros
+A macros for [Windy](https://github.com/takubokudori/windy).
+
+# Features
+
+Converts UTF-8 `&str` to:
+
+- `WString` using `wstring!` or `wstring_lossy!`.
+- `AString` using `astring!` or `astring_lossy!`.
+- `&WStr` using `wstr!` or `wstr_lossy!`.
+- `&AStr` using `astr!` or `astr_lossy!`.
+- `[u8]` using `aarr!` or `aarr_lossy!`.
+- `[u16]` using `warr!` or `warr_lossy!`.
+
+at compile time.
 
 # Installation
 
@@ -17,8 +30,8 @@ All windy versions are compatible.
 # Example
 
 ```rust
-use windy_macros::wstring;
 use windy::WString;
+use windy_macros::wstring;
 
 fn main() {
     let x: WString = wstring!("test");

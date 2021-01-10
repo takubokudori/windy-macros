@@ -49,30 +49,73 @@ macro_rules! lit_to_bs {
 
 /// Returns [`windy::WString`].
 ///
+/// If an invalid value is passed, this macro will be panicked.
+///
 /// # Example
 ///
 /// ```
 /// use windy::WString;
 /// use windy_macros::wstring;
-/// assert_eq!(WString::from_str_lossy("test"), wstring!("test"));
-/// assert_eq!(WString::from_str_lossy("4649"), wstring!(4649));
+///
+/// let s: WString = wstring!("test");
+/// println!("{:?}", s); // "test"
+/// let s: WString = wstring!(4649);
+/// println!("{:?}", s); // "4649"
 /// ```
 #[proc_macro]
 pub fn wstring(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
     let bs = lit_to_bs!(WString, ast);
-    let ts = format!("unsafe {{ WString::new_unchecked({}) }}", bs);
+    let ts = format!("unsafe {{ WString::new_nul_unchecked({}) }}", bs);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
+/// Returns [`windy::WString`].
+///
+/// # Example
+///
+/// ```
+/// use windy::WString;
+/// use windy_macros::wstring_lossy;
+///
+/// let s: WString = wstring_lossy!("test");
+/// println!("{:?}", s); // "test"
+/// let s: WString = wstring_lossy!(4649);
+/// println!("{:?}", s); // "4649"
+/// ```
 #[proc_macro]
 pub fn wstring_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
     let bs = lit_to_bs_lossy!(WString, ast);
-    let ts = format!("unsafe {{ WString::new_unchecked({}) }}", bs);
+    let ts = format!("unsafe {{ WString::new_nul_unchecked({}) }}", bs);
+
+    proc_macro::TokenStream::from_str(&ts).unwrap()
+}
+
+/// Returns [`windy::AString`].
+///
+/// If an invalid value is passed, this macro will be panicked.
+///
+/// # Example
+///
+/// ```
+/// use windy::AString;
+/// use windy_macros::astring;
+///
+/// let s: AString = astring!("test");
+/// println!("{:?}", s); // "test"
+/// let s: AString = astring!(4649);
+/// println!("{:?}", s); // "4649"
+/// ```
+#[proc_macro]
+pub fn astring(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let ast = parse_macro_input!(ast as Lit);
+
+    let bs = lit_to_bs!(AString, ast);
+    let ts = format!("unsafe {{ AString::new_nul_unchecked({}) }}", bs);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
@@ -83,31 +126,26 @@ pub fn wstring_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 ///
 /// ```
 /// use windy::AString;
-/// use windy_macros::astring;
-/// assert_eq!(AString::from_str_lossy("test"), astring!("test"));
-/// assert_eq!(AString::from_str_lossy("4649"), astring!(4649));
+/// use windy_macros::astring_lossy;
+///
+/// let s: AString = astring_lossy!("test");
+/// println!("{:?}", s); // "test"
+/// let s: AString = astring_lossy!(4649);
+/// println!("{:?}", s); // "4649"
 /// ```
-#[proc_macro]
-pub fn astring(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    let ast = parse_macro_input!(ast as Lit);
-
-    let bs = lit_to_bs!(AString, ast);
-    let ts = format!("unsafe {{ AString::new_unchecked({}) }}", bs);
-
-    proc_macro::TokenStream::from_str(&ts).unwrap()
-}
-
 #[proc_macro]
 pub fn astring_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
     let bs = lit_to_bs_lossy!(AString, ast);
-    let ts = format!("unsafe {{ AString::new_unchecked({}) }}", bs);
+    let ts = format!("unsafe {{ AString::new_nul_unchecked({}) }}", bs);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
 /// Returns &[`windy::WStr`].
+///
+/// If an invalid value is passed, this macro will be panicked.
 ///
 /// # Example
 ///
@@ -132,6 +170,20 @@ pub fn wstr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
+/// Returns &[`windy::WStr`].
+///
+/// # Example
+///
+/// ```
+/// use windy::{WStr, WString};
+/// use windy_macros::wstr_lossy;
+///
+/// let x: &WStr = wstr_lossy!("test");
+/// assert_eq!(
+///     WString::from_str_lossy("test").to_bytes_with_nul(),
+///     x.to_bytes_with_nul()
+/// );
+/// ```
 #[proc_macro]
 pub fn wstr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
@@ -144,6 +196,8 @@ pub fn wstr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 }
 
 /// Returns &[`windy::AStr`].
+///
+/// If an invalid value is passed, this macro will be panicked.
 ///
 /// # Example
 ///
@@ -168,6 +222,20 @@ pub fn astr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
+/// Returns &[`windy::AStr`].
+///
+/// # Example
+///
+/// ```
+/// use windy::{AStr, AString};
+/// use windy_macros::astr_lossy;
+///
+/// let x: &AStr = astr_lossy!("test");
+/// assert_eq!(
+///     AString::from_str_lossy("test").to_bytes_with_nul(),
+///     x.to_bytes_with_nul()
+/// );
+/// ```
 #[proc_macro]
 pub fn astr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
@@ -181,19 +249,18 @@ pub fn astr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 /// Returns `[u16]`.
 ///
+/// If an invalid value is passed, this macro will be panicked.
+///
 /// # Example
 ///
 /// ```
 /// use windy::WString;
 /// use windy_macros::warr;
-/// assert_eq!(
-///     WString::from_str_lossy("test").to_bytes_with_nul(),
-///     warr!("test")
-/// );
-/// assert_eq!(
-///     WString::from_str_lossy("4649").to_bytes_with_nul(),
-///     warr!(4649)
-/// );
+///
+/// let b: &[u16] = &warr!("test");
+/// assert_eq!(WString::from_str_lossy("test").to_bytes_with_nul(), b);
+/// let b: &[u16] = &warr!(4649);
+/// assert_eq!(WString::from_str_lossy("4649").to_bytes_with_nul(), b);
 /// ```
 #[proc_macro]
 pub fn warr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -204,6 +271,19 @@ pub fn warr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
+/// Returns `[u16]`.
+///
+/// # Example
+///
+/// ```
+/// use windy::WString;
+/// use windy_macros::warr_lossy;
+///
+/// let b: &[u16] = &warr_lossy!("test");
+/// assert_eq!(WString::from_str_lossy("test").to_bytes_with_nul(), b);
+/// let b: &[u16] = &warr_lossy!(4649);
+/// assert_eq!(WString::from_str_lossy("4649").to_bytes_with_nul(), b);
+/// ```
 #[proc_macro]
 pub fn warr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
@@ -215,19 +295,18 @@ pub fn warr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 /// Returns `[u8]`.
 ///
+/// If an invalid value is passed, this macro will be panicked.
+///
 /// # Example
 ///
 /// ```
 /// use windy::AString;
 /// use windy_macros::aarr;
-/// assert_eq!(
-///     AString::from_str_lossy("test").to_bytes_with_nul(),
-///     aarr!("test")
-/// );
-/// assert_eq!(
-///     AString::from_str_lossy("4649").to_bytes_with_nul(),
-///     aarr!(4649)
-/// );
+///
+/// let b: &[u8] = &aarr!("test");
+/// assert_eq!(AString::from_str_lossy("test").to_bytes_with_nul(), b);
+/// let b: &[u8] = &aarr!(4649);
+/// assert_eq!(AString::from_str_lossy("4649").to_bytes_with_nul(), b);
 /// ```
 #[proc_macro]
 pub fn aarr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -238,6 +317,19 @@ pub fn aarr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
 
+/// Returns `[u8]`.
+///
+/// # Example
+///
+/// ```
+/// use windy::AString;
+/// use windy_macros::aarr_lossy;
+///
+/// let b: &[u8] = &aarr_lossy!("test");
+/// assert_eq!(AString::from_str_lossy("test").to_bytes_with_nul(), b);
+/// let b: &[u8] = &aarr_lossy!(4649);
+/// assert_eq!(AString::from_str_lossy("4649").to_bytes_with_nul(), b);
+/// ```
 #[proc_macro]
 pub fn aarr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);

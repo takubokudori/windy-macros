@@ -2,7 +2,20 @@
 name = "windy-macros"
 version = "0.1.0"
 authors = ["takubokudori <takubokudori@gmail.com>"]
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/takubokudori/windy-macros"
+repository = "https://github.com/takubokudori/windy-macros"
+keywords = ["windy", "windows", "ansi", "unicode", "multi-byte"]
+description = "Macros to convert &str to a WString or AString at compile time"
+readme = "README.md"
 edition = "2018"
+
+exclude = [
+    ".gitignore",
+]
+
+[package.metadata.docs.rs]
+default-target = "x86_64-pc-windows-msvc"
 
 [lib]
 proc-macro = true

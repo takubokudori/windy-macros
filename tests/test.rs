@@ -53,7 +53,7 @@ mod tests {
         let x: AString = astring!("test");
         assert_eq!(ms!(@a "test"), x);
         assert_ne!(ms!(@a "test2"), x);
-        assert_eq!(ms!(@a "あ"), astring!('あ'));
+        assert_eq!(ms!(@a "a"), astring!('a'));
         assert_eq!(ms!(@a "4649"), astring!(4649));
         assert_eq!(ms!(@a "3.14"), astring!(3.14));
         assert_eq!(ms!(@a "true"), astring!(true));
@@ -115,7 +115,7 @@ mod tests {
         let x = to(astr!("test"));
         assert_eq!(ms!(@a "test"), x);
         assert_ne!(ms!(@a "test2"), x);
-        assert_eq!(ms!(@a "あ"), to(astr!('あ')));
+        assert_eq!(ms!(@a "a"), to(astr!('a')));
         assert_eq!(ms!(@a "4649"), to(astr!(4649)));
         assert_eq!(ms!(@a "3.14"), to(astr!(3.14)));
         assert_eq!(ms!(@a "true"), to(astr!(true)));
@@ -167,7 +167,7 @@ mod tests {
         let x: &[u8] = &aarr!("test");
         assert_eq!(ms!(@ab "test"), x);
         assert_ne!(ms!(@ab "test2"), x);
-        assert_eq!(ms!(@ab "あ"), &aarr!('あ'));
+        assert_eq!(ms!(@ab "a"), &aarr!('a'));
         assert_eq!(ms!(@ab "4649"), &aarr!(4649));
         assert_eq!(ms!(@ab "3.14"), &aarr!(3.14));
         assert_eq!(ms!(@ab "true"), &aarr!(true));
