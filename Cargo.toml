@@ -6,7 +6,7 @@ license = "MIT OR Apache-2.0"
 homepage = "https://github.com/takubokudori/windy-macros"
 repository = "https://github.com/takubokudori/windy-macros"
 keywords = ["windy", "windows", "ansi", "unicode", "multi-byte"]
-description = "Macros to convert &str to a WString or AString at compile time"
+description = "Macros to convert a UTF-8 string to WString or AString at compile time"
 readme = "README.md"
 edition = "2018"
 

@@ -24,17 +24,16 @@ Add the following lines to your Cargo.toml:
 
 ```toml
 [dependencies]
-windy = "0.1.2"
-windy-macros = "0.1.0"
+windy = "0.1.3"
 ```
 
-All windy versions are compatible.
+windy versions >= 0.1.3 are compatible.
 
 # Example
 
 ```rust
 use windy::WString;
-use windy_macros::wstring;
+use windy::macros::wstring;
 
 fn main() {
     let x: WString = wstring!("test");
