@@ -1,0 +1,3 @@
+[submodule "windy"]
+	path = windy
+	url = https://github.com/takubokudori/windy
