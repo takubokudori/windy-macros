@@ -20,17 +20,6 @@
 //!
 //! at compile time.
 //!
-//! # Example
-//!
-//! ```rust
-//! use windy::WString;
-//! use windy::macros::wstring;
-//!
-//! fn main() {
-//!     let x: WString = wstring!("test");
-//! }
-//! ```
-//!
 //! # License
 //!
 //! This software is released under the MIT or Apache-2.0 License, see LICENSE-MIT or LICENSE-APACHE.
