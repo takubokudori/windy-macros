@@ -18,17 +18,6 @@ Converts UTF-8 `&str` to:
 
 at compile time.
 
-# Installation
-
-Add the following lines to your Cargo.toml:
-
-```toml
-[dependencies]
-windy = "0.1.3"
-```
-
-windy versions >= 0.1.3 are compatible.
-
 # Example
 
 ```rust
