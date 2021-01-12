@@ -22,4 +22,4 @@ proc-macro = true
 
 [dependencies]
 syn = { version = "1.0.58", features = ["full", "extra-traits"] }
-windy = { path = "windy" }
+windy = { path = "windy", version = "0.1.3" }
