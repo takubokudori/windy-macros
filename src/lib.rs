@@ -58,14 +58,14 @@ macro_rules! lit_to_bs {
     ($x:ident, $ast:ident) => {{
         let s = lit_to_string($ast);
         let s = $x::from_str(&s).unwrap_or_else(|x| {
-            panic!(format!(
+            panic!(
                 concat!(
                     "{} couldn't be converted to ",
                     stringify!($x),
                     ": {:X?}"
                 ),
                 s, x
-            ))
+            )
         });
         let bytes = s.to_bytes_with_nul();
         format!("{:?}", bytes)
