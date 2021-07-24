@@ -5,7 +5,7 @@ authors = ["takubokudori <takubokudori@gmail.com>"]
 license = "MIT OR Apache-2.0"
 homepage = "https://github.com/takubokudori/windy-macros"
 repository = "https://github.com/takubokudori/windy-macros"
-keywords = ["windy", "windows", "ansi", "unicode", "multi-byte"]
+keywords = ["windy", "windows", "ansi", "unicode", "multibyte"]
 description = "Macros to convert a UTF-8 string to WString or AString at compile time"
 readme = "README.md"
 edition = "2018"
@@ -22,4 +22,4 @@ proc-macro = true
 
 [dependencies]
 syn = { version = "1.0.58", features = ["full", "extra-traits"] }
-windy = { path = "windy", version = "0.1" }
+windy = "0.2"
