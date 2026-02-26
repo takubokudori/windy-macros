@@ -21,11 +21,10 @@ at compile time.
 # Example
 
 ```rust
-use windy::WString;
 use windy::macros::wstring;
 
 fn main() {
-    let x: WString = wstring!("test");
+    let x = wstring!("test");
 }
 ```
 
