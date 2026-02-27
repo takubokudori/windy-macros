@@ -39,9 +39,9 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "windy"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a448dfc00276b90a1788a918d5d0091b8f6f9f1ca848b05f1bf4312df0fec768"
+checksum = "8f0aef56fefe39fc9d936ec7beeded979443f29ba6dc7d7af8e22a539fd9bd21"
 
 [[package]]
 name = "windy-macros"
