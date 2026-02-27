@@ -45,7 +45,7 @@ checksum = "a448dfc00276b90a1788a918d5d0091b8f6f9f1ca848b05f1bf4312df0fec768"
 
 [[package]]
 name = "windy-macros"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "syn",
  "windy",

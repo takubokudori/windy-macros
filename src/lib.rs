@@ -23,11 +23,20 @@
 //! # License
 //!
 //! This software is released under the MIT or Apache-2.0 License, see LICENSE-MIT or LICENSE-APACHE.
-#![cfg(windows)]
-
+#[cfg(not(windows))]
+compile_error!("windy-macros is Windows-host-only.");
+use crate::convert::*;
 use std::str::FromStr;
 use syn::{Lit, parse_macro_input};
 use windy::*;
+
+mod convert;
+mod raw;
+
+#[allow(unused)]
+pub(crate) const WC_ERR_INVALID_CHARS: u32 = 0x80;
+#[allow(unused)]
+pub(crate) const WC_NO_BEST_FIT_CHARS: u32 = 0x400;
 
 /// Returns [`String`].
 fn lit_to_string(ast: Lit) -> String {
@@ -70,6 +79,36 @@ macro_rules! lit_to_bs {
     }};
 }
 
+/// When compiling Rust code, the default code page ends up being changed to `CP_UTF8`, which causes mojibake when converting to ANSI.
+/// Therefore, we need to obtain the original code page from before the change and use it for conversion.
+fn utf8_lit_to_ansi(ast: Lit) -> String {
+    let s = lit_to_string(ast);
+    let default_cp =
+        get_system_default_acp().expect("Failed to get system default acp");
+    // UTF-8 -> Unicode -> ANSI
+    let s = utf8_to_wide(&s).unwrap();
+
+    let mut v = wide_to_mb(default_cp, s.as_slice())
+        .expect("Failed to convert Wide string to MultiByte string");
+    v.reserve_exact(1);
+    v.push(0);
+    format!("{:?}", v)
+}
+
+fn utf8_lit_to_ansi_lossy(ast: Lit) -> String {
+    let s = lit_to_string(ast);
+    let default_cp =
+        get_system_default_acp().expect("Failed to get system default acp");
+    // UTF-8 -> Unicode -> ANSI
+    let s = utf8_to_wide(&s).unwrap();
+
+    let mut v = wide_to_mb_lossy(default_cp, s.as_slice())
+        .expect("Failed to convert Wide string to MultiByte string");
+    v.reserve_exact(1);
+    v.push(0);
+    format!("{:?}", v)
+}
+
 /// Returns [`windy::WString`].
 ///
 /// If an invalid value is passed, this macro will be panicked.
@@ -89,7 +128,8 @@ pub fn wstring(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
     let bs = lit_to_bs!(WString, ast);
-    let ts = format!("unsafe {{ ::windy::WString::new_nul_unchecked({}) }}", bs);
+    let ts =
+        format!("unsafe {{ ::windy::WString::new_nul_unchecked({}) }}", bs);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
@@ -158,7 +198,7 @@ pub fn astring(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn astring_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
-    let bs = lit_to_bs_lossy!(AString, ast);
+    let bs = utf8_lit_to_ansi_lossy(ast);
     let ts =
         format!("unsafe {{ ::windy::AString::new_nul_unchecked({}) }}", bs);
 
@@ -241,7 +281,7 @@ pub fn wstr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn astr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
-    let bs = lit_to_bs!(AString, ast);
+    let bs = utf8_lit_to_ansi(ast);
     let ts = format!(
         "unsafe {{ ::windy::AStr::from_bytes_with_nul_unchecked(&{}) }}",
         bs
@@ -268,7 +308,7 @@ pub fn astr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn astr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
-    let bs = lit_to_bs_lossy!(AString, ast);
+    let bs = utf8_lit_to_ansi_lossy(ast);
     let ts = format!(
         "unsafe {{ ::windy::AStr::from_bytes_with_nul_unchecked(&{}) }}",
         bs
@@ -342,7 +382,7 @@ pub fn warr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn aarr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
-    let ts = lit_to_bs!(AString, ast);
+    let ts = utf8_lit_to_ansi(ast);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
@@ -364,7 +404,7 @@ pub fn aarr(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn aarr_lossy(ast: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let ast = parse_macro_input!(ast as Lit);
 
-    let ts = lit_to_bs_lossy!(AString, ast);
+    let ts = utf8_lit_to_ansi_lossy(ast);
 
     proc_macro::TokenStream::from_str(&ts).unwrap()
 }
