@@ -56,26 +56,6 @@ struct _cpinfoexw {
 }
 
 unsafe extern "system" {
-    pub(crate) fn MultiByteToWideChar(
-        CodePage: u32,
-        dwFlags: u32,
-        lpMultiByteStr: *const i8,
-        cbMultiByte: i32,
-        lpWideCharStr: *mut u16,
-        cchWideChar: i32,
-    ) -> i32;
-
-    pub(crate) fn WideCharToMultiByte(
-        CodePage: u32,
-        dwFlags: u32,
-        lpWideCharStr: *const u16,
-        cchWideChar: i32,
-        lpMultiByteStr: *mut i8,
-        cbMultiByte: i32,
-        lpDefaultChar: *const i8,
-        lpUsedDefaultChar: *mut i32,
-    ) -> i32;
-
     pub(crate) fn GetLocaleInfoEx(
         lpLocaleName: *const u16,
         LCType: u32,

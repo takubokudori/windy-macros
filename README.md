@@ -7,7 +7,7 @@ Macros for [Windy](https://github.com/takubokudori/windy).
 
 # Features
 
-Converts UTF-8 `&str` to:
+Converts UTF-8 literals to the following Windy string and byte-array types at compile time:
 
 - `WString` using `wstring!` or `wstring_lossy!`.
 - `AString` using `astring!` or `astring_lossy!`.
